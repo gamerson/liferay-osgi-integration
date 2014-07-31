@@ -16,10 +16,41 @@ buildscript {
 /* Load the BndPlugin class */
 apply from: buildscript.classLoader.getResource('aQute/bnd/gradle/BndPlugin.gradle')
 
+
+Closure deployTask = { task ->
+	def bndProject = bndWorkspace.getProject( task.project.name )
+
+	if (task.project.hasProperty("liferay_home")) {
+		def liferay_home = task.project.getProperty("liferay_home")
+		bndProject.buildFiles.each { buildFile ->
+			def deployPath = liferay_home + (liferay_home.endsWith("/") ? "" : "/") + "deploy"
+			bndProject.trace("Copying from $buildFile.absolutePath into $deployPath")
+			task.project.copy {
+				from buildFile.absolutePath
+				into deployPath
+			}
+		}
+	}
+}
+
+def foo() {
+	println "foo"
+}
+
+Closure integrationTest = { task ->
+	def bndProject = bndWorkspace.getProject( task.project.name )
+	foo()
+	println "Testing $task.project.name"
+}
+
+
 /* Configure the subprojects */
 subprojects {
   def bndProject = bndWorkspace.getProject(name)
   if (bndProject != null) {
     plugins.apply BndPlugin
+
+	it.task( dependsOn: 'build', 'deploy' ) << deployTask
+	it.task( dependsOn: 'deploy', 'integrationTest' ) << integrationTest
   }
 }
