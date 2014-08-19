@@ -1,7 +1,4 @@
--buildpath: osgi.core,\
-	osgi.cmpn,\
-	com.liferay.portal:portal-service;version=6.2.1,\
-	${junit},\
+-buildpath: com.liferay.portal:portal-service;version=6.2.1,\
 	org.osgi:org.osgi.compendium;version=5.0.0
 -dsannotations: *
 Bundle-Version: 0.0.0.${tstamp}
@@ -16,4 +13,5 @@ Import-Package:  \
 	com.liferay.portal.kernel.search;version='[6.2.0,7.1.0)',\
 	com.liferay.portal.kernel.util;version='[6.2.0,7.1.0)',\
 	com.liferay.portal.model;version='[6.2.0,7.1.0)',\
-	com.liferay.portal.service;version='[6.2.0,7.1.0)'
+	com.liferay.portal.service;version='[6.2.0,7.1.0)',\
+	*
